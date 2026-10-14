@@ -143,11 +143,11 @@ function fireLaser(fromEl, toEl) {
   const dx = x2 - x1;
   const dy = y2 - y1;
   const len = Math.sqrt(dx * dx + dy * dy);
-  const angle = (Math.atan2(dy, dx) * 180) / Math.PI + 90;
+  const angle = (Math.atan2(dy, dx) * 180) / Math.PI - 90;
 
   const beam = document.createElement("div");
   beam.className = "laser-beam";
-  beam.style.left = `${x1}px`;
+  beam.style.left = `${x1 - 3.5}px`;
   beam.style.top = `${y1}px`;
   beam.style.height = `${len}px`;
   beam.style.transform = `rotate(${angle}deg)`;
