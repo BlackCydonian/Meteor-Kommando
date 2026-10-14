@@ -378,7 +378,7 @@ function nextQuestion() {
 function startBoss() {
   state.phase = "boss";
   bossWrap.hidden = false;
-  bossSprite.textContent = "🛸";
+  bossSprite.textContent = "👹";
   document.getElementById("boss-name").textContent = BOSS_NAMES[state.table];
   bossHpFill.style.width = "100%";
   updateHud();
@@ -435,6 +435,8 @@ function handleAnswer(chosen, correctValue, btn) {
         if (b !== btn) b.classList.remove("wrong");
       });
       btn.classList.remove("wrong");
+      shipSprite.classList.remove("shield");
+      target.classList.remove("shake");
     }, 500);
   }
 }

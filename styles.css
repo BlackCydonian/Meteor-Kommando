@@ -317,7 +317,7 @@ body {
   animation: ship-hover 2.8s ease-in-out infinite;
 }
 
-.enemy-ship {
+.enemy-monster {
   font-size: clamp(3.6rem, 20vw, 5.8rem);
   line-height: 1;
   filter: drop-shadow(0 0 22px rgba(255, 16, 53, 0.45)) drop-shadow(0 0 10px rgba(123, 95, 255, 0.35));
@@ -409,6 +409,14 @@ body {
 .ship-sprite {
   font-size: 2.6rem;
   filter: drop-shadow(0 0 16px rgba(76, 224, 210, 0.5));
+  animation: ufo-patrol 4.5s ease-in-out infinite;
+}
+
+@keyframes ufo-patrol {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  25% { transform: translate(-16px, -6px) rotate(-5deg); }
+  50% { transform: translate(0, -10px) rotate(0deg); }
+  75% { transform: translate(16px, -6px) rotate(5deg); }
 }
 
 .ship-sprite.shield {
