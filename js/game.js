@@ -330,7 +330,7 @@ function nextQuestion() {
   }
 
   const { a, b } = state.currentQuestion;
-  asteroidProblem.textContent = `${a} × ${b}`;
+  asteroidProblem.textContent = `${b} × ${a}`;
   asteroidEl.classList.remove("hit");
 
   const options = generateOptions(a, b);
