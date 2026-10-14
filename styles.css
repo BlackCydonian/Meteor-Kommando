@@ -9,6 +9,8 @@
   --accent: #7b5fff;
   --accent-soft: #a98bff;
   --laser: #4ce0d2;
+  --laser-shot: #ff1035;
+  --laser-shot-core: #fff2f2;
   --warn: #ff6b6b;
   --star: #ffd166;
   --text: #f4f6fb;
@@ -44,6 +46,21 @@ body {
   display: block;
   width: 100%;
   height: 100%;
+}
+
+#ambient-ships {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.ambient-ship {
+  position: absolute;
+  font-size: clamp(1.1rem, 4vw, 1.7rem);
+  opacity: 0.5;
+  filter: drop-shadow(0 0 8px rgba(123, 95, 255, 0.4));
 }
 
 #app {
@@ -293,21 +310,31 @@ body {
 }
 
 .asteroid {
-  width: min(62vw, 230px);
-  height: min(62vw, 230px);
-  border-radius: 46% 54% 52% 48% / 50% 46% 54% 50%;
-  background: radial-gradient(circle at 35% 30%, #3a2f5c, var(--bg-2) 72%);
-  border: 2px solid var(--panel-edge);
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  animation: bob 3.4s ease-in-out infinite;
-  box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.4), 0 0 24px rgba(123, 95, 255, 0.2);
+  gap: 16px;
+  animation: ship-hover 2.8s ease-in-out infinite;
 }
 
-@keyframes bob {
-  0%, 100% { transform: translateY(0) rotate(-2deg); }
-  50% { transform: translateY(-10px) rotate(2deg); }
+.enemy-ship {
+  font-size: clamp(3.6rem, 20vw, 5.8rem);
+  line-height: 1;
+  filter: drop-shadow(0 0 22px rgba(255, 16, 53, 0.45)) drop-shadow(0 0 10px rgba(123, 95, 255, 0.35));
+}
+
+@keyframes ship-hover {
+  0%, 100% { transform: translateY(0) rotate(-3deg); }
+  50% { transform: translateY(-14px) rotate(3deg); }
+}
+
+@keyframes fly-in {
+  from { transform: translateX(130%) rotate(18deg) scale(0.8); opacity: 0; }
+  to { transform: translateX(0) rotate(-3deg) scale(1); opacity: 1; }
+}
+
+.asteroid.enter {
+  animation: fly-in 0.45s cubic-bezier(0.2, 0.7, 0.3, 1.1);
 }
 
 .asteroid.hit {
@@ -329,10 +356,15 @@ body {
   80% { transform: translateX(8px); }
 }
 
-#asteroid-problem {
+.problem-tag {
   font-family: var(--font-display);
   font-size: clamp(1.5rem, 8vw, 2.1rem);
   font-variant-numeric: tabular-nums;
+  background: var(--panel);
+  border: 1px solid var(--panel-edge);
+  padding: 8px 22px;
+  border-radius: 999px;
+  box-shadow: 0 0 20px rgba(123, 95, 255, 0.25);
   text-shadow: 0 0 14px rgba(244, 246, 251, 0.3);
 }
 
@@ -346,8 +378,12 @@ body {
 
 #boss-sprite {
   font-size: clamp(2.6rem, 14vw, 4rem);
-  filter: drop-shadow(0 0 20px rgba(255, 107, 107, 0.5));
-  animation: bob 2.6s ease-in-out infinite;
+  animation: ship-hover 2.6s ease-in-out infinite, boss-pulse 1.3s ease-in-out infinite;
+}
+
+@keyframes boss-pulse {
+  0%, 100% { filter: drop-shadow(0 0 18px rgba(255, 16, 53, 0.55)); }
+  50% { filter: drop-shadow(0 0 34px rgba(255, 16, 53, 0.95)); }
 }
 
 #boss-sprite.shake {
@@ -443,10 +479,10 @@ body {
 
 .laser-beam {
   position: absolute;
-  width: 4px;
+  width: 7px;
   border-radius: 999px;
-  background: linear-gradient(180deg, var(--laser), transparent);
-  box-shadow: 0 0 10px var(--laser);
+  background: linear-gradient(180deg, var(--laser-shot-core) 0%, var(--laser-shot) 35%, rgba(255, 16, 53, 0) 100%);
+  box-shadow: 0 0 12px 3px var(--laser-shot), 0 0 28px 8px rgba(255, 16, 53, 0.65);
   transform-origin: bottom center;
 }
 

@@ -164,7 +164,8 @@ function fireLaser(fromEl, toEl) {
   }, 110);
   setTimeout(() => beam.remove(), 350);
 
-  spawnBurst(x2, y2, "#4ce0d2", 14);
+  spawnBurst(x2, y2, "#ff3b3b", 16);
+  spawnBurst(x2, y2, "#ffb020", 10);
 }
 
 function spawnBurst(x, y, color, count = 16) {
@@ -221,6 +222,36 @@ function spawnConfetti() {
     setTimeout(() => p.remove(), duration + 60);
   }
 }
+
+/* ---------- Fliegende Schiffe im Hintergrund ---------- */
+
+const ambientLayer = document.getElementById("ambient-ships");
+
+function spawnAmbientShip() {
+  const el = document.createElement("div");
+  el.className = "ambient-ship";
+  el.textContent = Math.random() < 0.5 ? "🚀" : "🛸";
+  const topPct = randInt(6, 72);
+  const duration = randInt(9000, 15000);
+  const leftToRight = Math.random() < 0.5;
+  el.style.top = `${topPct}%`;
+  el.style.left = leftToRight ? "-12%" : "112%";
+  el.style.transform = `rotate(${leftToRight ? 90 : -90}deg) scaleX(${leftToRight ? 1 : -1})`;
+  ambientLayer.appendChild(el);
+
+  requestAnimationFrame(() => {
+    el.style.transition = `left ${duration}ms linear`;
+    el.style.left = leftToRight ? "112%" : "-12%";
+  });
+  setTimeout(() => el.remove(), duration + 200);
+}
+
+function scheduleAmbientShips() {
+  spawnAmbientShip();
+  setTimeout(scheduleAmbientShips, randInt(4000, 8000));
+}
+
+scheduleAmbientShips();
 
 /* ---------- Bildschirm-Umschaltung ---------- */
 
@@ -332,6 +363,10 @@ function nextQuestion() {
   const { a, b } = state.currentQuestion;
   asteroidProblem.textContent = `${b} × ${a}`;
   asteroidEl.classList.remove("hit");
+  asteroidEl.classList.remove("enter");
+  void asteroidEl.offsetWidth;
+  asteroidEl.classList.add("enter");
+  setTimeout(() => asteroidEl.classList.remove("enter"), 500);
 
   const options = generateOptions(a, b);
   answerButtons.forEach((btn, i) => {
@@ -343,7 +378,7 @@ function nextQuestion() {
 function startBoss() {
   state.phase = "boss";
   bossWrap.hidden = false;
-  bossSprite.textContent = "👾";
+  bossSprite.textContent = "🛸";
   document.getElementById("boss-name").textContent = BOSS_NAMES[state.table];
   bossHpFill.style.width = "100%";
   updateHud();
