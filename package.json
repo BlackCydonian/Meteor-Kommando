@@ -3,5 +3,11 @@
   "version": "1.0.0",
   "description": "Weltraum-Spiel, mit dem Bruno das 1x1 übt",
   "main": "index.html",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "wrangler": "^4.151.0"
+  },
+  "scripts": {
+    "deploy": "wrangler pages deploy ."
+  }
 }

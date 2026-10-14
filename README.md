@@ -4,6 +4,10 @@ Weltraum-Spiel für Bruno, um das 1×1 spielerisch zu üben: Asteroiden mit Mult
 
 Einfach `index.html` im Browser öffnen — kein Build-Schritt nötig.
 
+**Live:** https://meteor-kommando.pages.dev
+
+Neu deployen nach Änderungen: `npm run deploy` (benötigt `npx wrangler login` einmalig).
+
 ## Ideen für's Weiterbauen mit Bruno
 
 - Neue Schiff- oder Boss-Skins
