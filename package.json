@@ -1,0 +1,7 @@
+{
+  "name": "meteor-kommando",
+  "version": "1.0.0",
+  "description": "Weltraum-Spiel, mit dem Bruno das 1x1 übt",
+  "main": "index.html",
+  "license": "ISC"
+}

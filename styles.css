@@ -1,0 +1,506 @@
+/* Meteor-Kommando — Einmaleins-Weltraum-Spiel
+   Farbwelt: tiefes Weltall, Nebel-Lila, Laser-Türkis, Sternen-Gelb */
+
+:root {
+  --bg: #0b1026;
+  --bg-2: #141b36;
+  --panel: #1b2447;
+  --panel-edge: #2a3566;
+  --accent: #7b5fff;
+  --accent-soft: #a98bff;
+  --laser: #4ce0d2;
+  --warn: #ff6b6b;
+  --star: #ffd166;
+  --text: #f4f6fb;
+  --text-dim: #9aa3c7;
+  --font-display: "Orbitron", "Segoe UI", sans-serif;
+  --font-body: "Rubik", "Segoe UI", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 0 16px;
+  padding-block: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  overflow: hidden;
+  position: relative;
+}
+
+#starfield {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+#app {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  max-width: 560px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.screen {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding-block: calc(16px + env(safe-area-inset-top, 0px)) calc(16px + env(safe-area-inset-bottom, 0px));
+  animation: fade-in 0.35s ease;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------- Start screen ---------- */
+
+#screen-start {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 28px;
+}
+
+.title-wrap h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 9vw, 2.9rem);
+  line-height: 1.15;
+  letter-spacing: 0.04em;
+  margin: 0;
+  color: var(--text);
+  text-shadow: 0 0 18px rgba(123, 95, 255, 0.55), 0 0 2px var(--accent-soft);
+}
+
+.title-wrap h1 span {
+  color: var(--laser);
+  text-shadow: 0 0 18px rgba(76, 224, 210, 0.6);
+}
+
+.subtitle {
+  margin: 10px 0 0;
+  color: var(--text-dim);
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.hero-ship {
+  width: min(55vw, 220px);
+  filter: drop-shadow(0 0 24px rgba(123, 95, 255, 0.45));
+  animation: hover 3.2s ease-in-out infinite;
+}
+
+@keyframes hover {
+  0%, 100% { transform: translateY(0px) rotate(-1deg); }
+  50% { transform: translateY(-12px) rotate(1deg); }
+}
+
+.btn-primary {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  letter-spacing: 0.06em;
+  color: #0b1026;
+  background: linear-gradient(135deg, var(--laser), var(--accent-soft));
+  border: none;
+  border-radius: 999px;
+  padding: 16px 36px;
+  cursor: pointer;
+  box-shadow: 0 0 0 2px rgba(244, 246, 251, 0.08), 0 10px 30px rgba(76, 224, 210, 0.3);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.btn-primary:active {
+  transform: scale(0.96);
+}
+
+.btn-secondary {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--text);
+  background: var(--panel);
+  border: 1px solid var(--panel-edge);
+  border-radius: 999px;
+  padding: 12px 24px;
+  cursor: pointer;
+}
+
+/* ---------- Top bar / HUD ---------- */
+
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.topbar h2 {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  letter-spacing: 0.04em;
+  margin: 0;
+  flex: 1;
+  text-align: center;
+}
+
+.icon-btn {
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 1px solid var(--panel-edge);
+  background: var(--panel);
+  color: var(--text);
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hud-info {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-family: var(--font-display);
+  font-variant-numeric: tabular-nums;
+}
+
+.hud-label {
+  font-size: 0.85rem;
+  color: var(--accent-soft);
+  letter-spacing: 0.04em;
+}
+
+.hud-score,
+.hud-streak {
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+/* ---------- Planet / level map ---------- */
+
+#screen-map {
+  overflow-y: auto;
+}
+
+.planet-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  padding-bottom: 8px;
+}
+
+.planet {
+  position: relative;
+  border: none;
+  border-radius: 20px;
+  padding: 18px 10px;
+  background: radial-gradient(circle at 30% 25%, var(--panel-edge), var(--panel) 70%);
+  color: var(--text);
+  font-family: var(--font-display);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.planet .num {
+  font-size: 1.7rem;
+}
+
+.planet .label {
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  letter-spacing: 0.04em;
+}
+
+.planet .stars {
+  font-size: 0.8rem;
+  color: var(--star);
+  min-height: 1em;
+}
+
+.planet.locked {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.planet.locked .num::after {
+  content: "🔒";
+  font-size: 0.9rem;
+  margin-left: 6px;
+}
+
+.planet:not(.locked) {
+  box-shadow: 0 0 0 2px rgba(123, 95, 255, 0.25), 0 8px 20px rgba(76, 224, 210, 0.12);
+}
+
+/* ---------- Game stage ---------- */
+
+#screen-game {
+  overflow: hidden;
+}
+
+#progress-track {
+  height: 8px;
+  border-radius: 999px;
+  background: var(--panel);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+#progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--accent), var(--laser));
+  transition: width 0.3s ease;
+}
+
+.stage {
+  flex: 1;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+}
+
+.asteroid {
+  width: min(62vw, 230px);
+  height: min(62vw, 230px);
+  border-radius: 46% 54% 52% 48% / 50% 46% 54% 50%;
+  background: radial-gradient(circle at 35% 30%, #3a2f5c, var(--bg-2) 72%);
+  border: 2px solid var(--panel-edge);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: bob 3.4s ease-in-out infinite;
+  box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.4), 0 0 24px rgba(123, 95, 255, 0.2);
+}
+
+@keyframes bob {
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  50% { transform: translateY(-10px) rotate(2deg); }
+}
+
+.asteroid.hit {
+  animation: none;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+  transform: scale(1.3);
+  opacity: 0;
+}
+
+.asteroid.shake {
+  animation: shake 0.4s ease;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-10px) rotate(-2deg); }
+  40% { transform: translateX(10px) rotate(2deg); }
+  60% { transform: translateX(-8px); }
+  80% { transform: translateX(8px); }
+}
+
+#asteroid-problem {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 8vw, 2.1rem);
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 0 14px rgba(244, 246, 251, 0.3);
+}
+
+#boss-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: -6px;
+}
+
+#boss-sprite {
+  font-size: clamp(2.6rem, 14vw, 4rem);
+  filter: drop-shadow(0 0 20px rgba(255, 107, 107, 0.5));
+  animation: bob 2.6s ease-in-out infinite;
+}
+
+#boss-sprite.shake {
+  animation: shake 0.4s ease;
+}
+
+#boss-hp-track {
+  width: min(70vw, 260px);
+  height: 10px;
+  border-radius: 999px;
+  background: var(--panel);
+  overflow: hidden;
+  border: 1px solid var(--panel-edge);
+}
+
+#boss-hp-fill {
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(90deg, var(--warn), var(--star));
+  transition: width 0.3s ease;
+}
+
+.ship-sprite {
+  font-size: 2.6rem;
+  filter: drop-shadow(0 0 16px rgba(76, 224, 210, 0.5));
+}
+
+.ship-sprite.shield {
+  animation: shield-flash 0.45s ease;
+}
+
+@keyframes shield-flash {
+  0% { filter: drop-shadow(0 0 0 rgba(255, 107, 107, 0)); }
+  40% { filter: drop-shadow(0 0 26px rgba(255, 107, 107, 0.95)); }
+  100% { filter: drop-shadow(0 0 16px rgba(76, 224, 210, 0.5)); }
+}
+
+.answers-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.answer-btn {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-variant-numeric: tabular-nums;
+  padding: 16px 8px;
+  border-radius: 16px;
+  border: 1px solid var(--panel-edge);
+  background: var(--panel);
+  color: var(--text);
+  cursor: pointer;
+  transition: transform 0.12s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+.answer-btn:active {
+  transform: scale(0.95);
+}
+
+.answer-btn.correct {
+  background: rgba(76, 224, 210, 0.22);
+  border-color: var(--laser);
+  color: var(--laser);
+}
+
+.answer-btn.wrong {
+  background: rgba(255, 107, 107, 0.22);
+  border-color: var(--warn);
+  color: var(--warn);
+}
+
+.answer-btn[disabled] {
+  pointer-events: none;
+}
+
+/* ---------- Particle layer (lasers / explosions / confetti) ---------- */
+
+#particles-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  will-change: transform, opacity;
+}
+
+.laser-beam {
+  position: absolute;
+  width: 4px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--laser), transparent);
+  box-shadow: 0 0 10px var(--laser);
+  transform-origin: bottom center;
+}
+
+/* ---------- Victory screen ---------- */
+
+#screen-victory {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 18px;
+}
+
+.victory-stars {
+  font-size: 2.6rem;
+  letter-spacing: 0.12em;
+}
+
+.victory-stars span {
+  opacity: 0.25;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  display: inline-block;
+}
+
+.victory-stars span.earned {
+  opacity: 1;
+  color: var(--star);
+  text-shadow: 0 0 16px rgba(255, 209, 102, 0.7);
+}
+
+#victory-title {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  margin: 0;
+}
+
+#victory-sub {
+  color: var(--text-dim);
+  margin: 0;
+}
+
+.victory-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* ---------- Utility ---------- */
+
+[hidden] {
+  display: none !important;
+}
+
+@media (max-width: 380px) {
+  .planet .num { font-size: 1.4rem; }
+  .btn-primary { padding: 14px 28px; }
+}

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Meteor-Kommando</title>
+  <meta name="description" content="Weltraum-Spiel, mit dem Bruno das 1×1 trainiert, indem er Asteroiden mit der richtigen Antwort abschießt." />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#0b1026" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rubik:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <canvas id="starfield"></canvas>
+  <div id="particles-layer"></div>
+
+  <div id="app">
+    <!-- Start -->
+    <section id="screen-start" class="screen">
+      <div class="title-wrap">
+        <h1>METEOR<br /><span>KOMMANDO</span></h1>
+        <p class="subtitle">Rechne. Ziele. Feuer.</p>
+      </div>
+      <div class="hero-ship" aria-hidden="true" style="font-size: 5rem; text-align: center;">🚀</div>
+      <button id="btn-play" class="btn-primary">Mission starten</button>
+    </section>
+
+    <!-- Sternenkarte / Level-Auswahl -->
+    <section id="screen-map" class="screen" hidden>
+      <header class="topbar">
+        <button class="icon-btn" id="btn-map-back" aria-label="Zurück">←</button>
+        <h2>Sternenkarte</h2>
+        <span style="width: 42px;"></span>
+      </header>
+      <div id="planet-grid" class="planet-grid"></div>
+    </section>
+
+    <!-- Spiel -->
+    <section id="screen-game" class="screen" hidden>
+      <header class="topbar hud">
+        <button class="icon-btn" id="btn-game-back" aria-label="Zurück zur Karte">←</button>
+        <div class="hud-info">
+          <span class="hud-label" id="hud-table">Reihe der 1</span>
+          <span class="hud-score">⭐ <span id="hud-score-val">0</span></span>
+          <span class="hud-streak">🔥 <span id="hud-streak-val">0</span></span>
+        </div>
+      </header>
+      <div id="progress-track"><div id="progress-fill"></div></div>
+
+      <div class="stage">
+        <div id="boss-wrap" hidden>
+          <span class="hud-label" id="boss-name"></span>
+          <div id="boss-sprite"></div>
+          <div id="boss-hp-track"><div id="boss-hp-fill"></div></div>
+        </div>
+
+        <div id="asteroid" class="asteroid">
+          <span id="asteroid-problem">7 × 4</span>
+        </div>
+
+        <div id="ship-sprite" class="ship-sprite">🚀</div>
+      </div>
+
+      <div id="answers" class="answers-grid">
+        <button class="answer-btn" data-idx="0"></button>
+        <button class="answer-btn" data-idx="1"></button>
+        <button class="answer-btn" data-idx="2"></button>
+        <button class="answer-btn" data-idx="3"></button>
+      </div>
+    </section>
+
+    <!-- Sieg -->
+    <section id="screen-victory" class="screen" hidden>
+      <div id="victory-stars" class="victory-stars">
+        <span>★</span><span>★</span><span>★</span>
+      </div>
+      <h2 id="victory-title">Reihe gemeistert!</h2>
+      <p id="victory-sub">Super gemacht.</p>
+      <div class="victory-actions">
+        <button id="btn-victory-next" class="btn-primary">Nächste Reihe</button>
+        <button id="btn-victory-map" class="btn-secondary">Zur Sternenkarte</button>
+      </div>
+    </section>
+  </div>
+
+  <script src="js/game.js"></script>
+</body>
+</html>
