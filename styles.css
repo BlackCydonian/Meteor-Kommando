@@ -407,7 +407,7 @@ body {
 }
 
 .ship-sprite {
-  font-size: 2.6rem;
+  font-size: clamp(3.4rem, 15vw, 4.6rem);
   filter: drop-shadow(0 0 16px rgba(76, 224, 210, 0.5));
   animation: ufo-patrol 4.5s ease-in-out infinite;
 }
